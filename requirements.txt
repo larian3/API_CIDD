@@ -7,7 +7,7 @@ aiosignal # file:///tmp/build/80754af9/aiosignal_1637843061372/work
 aiosqlite # file:///C:/b/abs_9djc_0pyi3/croot/aiosqlite_1683773915844/work
 alabaster # file:///home/ktietz/src/ci/alabaster_1611921544520/work
 anaconda-catalogs # file:///C:/b/abs_8btyy0o8s8/croot/anaconda-catalogs_1685727315626/work
-anaconda-client
+anaconda-client==1.12.0
 anaconda-navigator==2.4.2
 anaconda-project # file:///C:/ci_311/anaconda-project_1676458365912/work
 aniso8601==9.0.1

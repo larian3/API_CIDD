@@ -6,11 +6,12 @@ import numpy as np
 import tensorflow as tf
 from keras.preprocessing import image
 
+from pathlib import Path
+
 app = Flask(__name__)
 
-#Importar modelo treinado
-directory = 'C:/cacau/modelos/'
-model = tf.keras.models.load_model(directory + 'model_w.h5')
+
+model = tf.keras.models.load_model('C:/cacau/modelos/model_2.h5')
 
 def preprocess_image(img):
     img = img.resize((150, 150))
@@ -54,15 +55,33 @@ def predict():
         processed_image = preprocess_image(img)
         prediction = model.predict(processed_image)
 
-        # Aqui você pode processar a saída do modelo conforme necessário
-        # Por exemplo, converter para uma resposta JSON
-        result = {'prediction': prediction.tolist()}
-        print(result)
+        # Obtém todas as classes previstas e suas confianças
+        predicted_classes = np.argsort(prediction[0])[::-1]  # Obtém as classes ordenadas por confiança
+        prediction_results = {}
+        for i, class_index in enumerate(predicted_classes):
+            class_name = f"Classe {class_index}"  # Ajuste conforme suas classes
+            class_confidence = float(prediction[0][class_index])
+            prediction_results[class_name] = class_confidence
 
-        return jsonify(result)
-    
+        #Retorna os resultados originais em JSON;
+        result_original = {'predictions': prediction_results}
+            
+        # Normaliza as probabilidades para que a soma seja igual a 1
+        total_confidence = sum(prediction_results.values())
+        normalized_results = {class_name: (class_confidence / total_confidence) for class_name, class_confidence in prediction_results.items()}
+
+        # Retorna os resultados normalizados em JSON;
+        result_normalizado = {'predictions': normalized_results}
+
+        # Visualização Original;
+        print('Resultados Originais:', result_original)
+        # Visualização Normalizada;
+        print('Resultados Normalizados:', result_normalizado)
+
+        return jsonify(result_normalizado)
     except Exception as e:
         return jsonify({'error': f'Erro ao processar dados base64: {str(e)}'}), 400
+    
 
 
 if __name__ == '__main__':

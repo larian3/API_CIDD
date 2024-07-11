@@ -11,7 +11,7 @@ from pathlib import Path
 app = Flask(__name__)
 
 
-model = tf.keras.models.load_model('C:/cacau/modelos/model_2.h5')
+model = tf.keras.models.load_model('../model.h5')
 
 def preprocess_image(img):
     img = img.resize((150, 150))
@@ -85,4 +85,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug='true')
+    app.run(host='0.0.0.0', port=8085, debug='true')
